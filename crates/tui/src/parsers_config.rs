@@ -438,6 +438,6 @@ pub const PARSERS: &[ParserEntry] = &[
 /// Lookup by filetype or alias.
 pub fn parser_for(filetype: &str) -> Option<&'static ParserEntry> {
     PARSERS.iter().find(|entry| {
-        entry.filetype == filetype || entry.aliases.iter().any(|alias| *alias == filetype)
+        entry.filetype == filetype || entry.aliases.contains(&filetype)
     })
 }
