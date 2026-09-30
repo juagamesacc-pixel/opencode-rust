@@ -135,6 +135,26 @@ pub fn today_time_or_date_time(input_ms: i64) -> String {
     }
 }
 
+/// Mirrors `Date.toDateString()` en-US (`Wed Oct 01 2025`).
+pub fn date_string(input_ms: i64) -> String {
+    const DAYS: [&str; 7] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const MONTHS: [&str; 12] = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+    let days = input_ms.div_euclid(86_400_000);
+    // 1970-01-01 was a Thursday (index 4).
+    let weekday = DAYS[(days + 4).rem_euclid(7) as usize];
+    match local_parts(input_ms) {
+        Some(parts) => format!(
+            "{} {} {:02} {}",
+            weekday,
+            MONTHS[(parts.month.saturating_sub(1) as usize).min(11)],
+            parts.day,
+            parts.year
+        ),
+        None => String::new(),
+    }
+}
 /// Mirrors the transcript header clock — en-US `toLocaleString()`
 /// (`M/D/YYYY, h:mm:ss AM`).
 pub fn locale_string(input_ms: i64) -> String {
