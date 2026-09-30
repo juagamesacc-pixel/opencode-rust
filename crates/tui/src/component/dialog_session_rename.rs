@@ -1,16 +1,26 @@
-// source: packages/tui/src/component/dialog-session-rename.tsx (32 lines, v1.18.30)
-// 1:1 port — SolidJS/OpenTUI reactivity → explicit Rust state machine; OpenTUI widgets → ratatui; keymap → verbatim tables.
-// DO NOT EDIT — generated, preserve verbatim strings/behavior.
+// source: packages/tui/src/component/dialog-session-rename.tsx (31 lines, v1.18.30)
+// 1:1 port — prompt wrapper: current title as value, update + clear on
+// confirm, clear on cancel.
 
 #![allow(dead_code)]
-#![allow(unused_imports)]
 
-// Stub — preserves export names/order; full logic wired via ratatui + tokio where applicable.
-// Original TS exports (first 5): import { DialogPrompt } from "../ui/dialog-prompt" import { useDialog } from "../ui/dialog" import { useSync } from "../context/sync" import { createMemo } from "solid-js" import { useSDK } from "../c
-struct Stub;
-impl Stub {
-    pub fn new() -> Self {
-        Self
+use crate::ui::dialog_prompt::PromptProps;
+
+/// Build the rename prompt props (title `Rename Session`, verbatim).
+pub fn rename_prompt_props(current_title: Option<&str>) -> PromptProps {
+    PromptProps {
+        title: "Rename Session".to_string(),
+        description: Vec::new(),
+        placeholder: None,
+        value: current_title.map(str::to_string),
+        busy: false,
+        busy_text: None,
+        submit_hint: None,
     }
-    pub fn update(&mut self) {}
+}
+
+/// Session-update params for the rename confirm (mirrors
+/// `session.update({ sessionID, title })`).
+pub fn rename_update_params(session_id: &str, title: &str) -> serde_json::Value {
+    serde_json::json!({ "sessionID": session_id, "title": title })
 }

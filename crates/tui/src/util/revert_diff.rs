@@ -57,7 +57,7 @@ pub fn get_revert_diff_files(diff_text: &str) -> Vec<RevertDiffFile> {
 fn new_file(git_header: &str) -> RevertDiffFile {
     // `a/path b/path` — prefer the b-side, fall back to the a-side.
     let parts: Vec<&str> = git_header.split_whitespace().collect();
-    let candidate = parts.iter().rev().find(|part| *part != "/dev/null").copied().unwrap_or("unknown");
+    let candidate = parts.iter().rev().find(|part| **part != "/dev/null").copied().unwrap_or("unknown");
     RevertDiffFile { filename: strip_prefix(candidate), additions: 0, deletions: 0 }
 }
 

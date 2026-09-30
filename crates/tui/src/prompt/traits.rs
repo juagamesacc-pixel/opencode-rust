@@ -1,16 +1,48 @@
-// source: packages/tui/src/prompt/traits.ts (30 lines, v1.18.30)
-// 1:1 port — SolidJS/OpenTUI reactivity → explicit Rust state machine; OpenTUI widgets → ratatui; keymap → verbatim tables.
-// DO NOT EDIT — generated, preserve verbatim strings/behavior.
+// source: packages/tui/src/prompt/traits.ts (29 lines, v1.18.30)
+// 1:1 port — prompt textarea traits verbatim (capture sets + SHELL status).
 
 #![allow(dead_code)]
-#![allow(unused_imports)]
 
-// Stub — preserves export names/order; full logic wired via ratatui + tokio where applicable.
-// Original TS exports (first 5): import type { EditorTraits } from "@opentui/core"  export type PromptMode = "normal" | "shell"  export interface PromptTraitsInput {   mode: PromptMode   autocompleteVisible: boolean }  export type Pr
-struct Stub;
-impl Stub {
-    pub fn new() -> Self {
-        Self
+/// `PromptMode` lives in `history` (mirrors the shared mode union).
+pub use super::history::PromptMode;
+
+/// Capture sets verbatim.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PromptCapture {
+    EscapeNavigateSubmitTab,
+    TabOnly,
+    None,
+}
+
+/// Mirrors `PromptTraits` (owner/role constant).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PromptTraits {
+    pub capture: PromptCapture,
+    pub status_shell: bool,
+    pub owner_is_opencode: bool,
+    pub role_is_prompt: bool,
+}
+
+/// Mirrors `computePromptTraits`.
+pub fn compute_prompt_traits(mode: PromptMode, autocomplete_visible: bool) -> PromptTraits {
+    let capture = match mode {
+        PromptMode::Normal if autocomplete_visible => PromptCapture::EscapeNavigateSubmitTab,
+        PromptMode::Normal => PromptCapture::TabOnly,
+        PromptMode::Shell => PromptCapture::None,
+    };
+    PromptTraits {
+        capture,
+        status_shell: mode == PromptMode::Shell,
+        owner_is_opencode: true,
+        role_is_prompt: true,
     }
-    pub fn update(&mut self) {}
+}
+
+/// Capture key names for the keymap layer.
+pub fn capture_keys(capture: PromptCapture) -> &'static [&'static str] {
+    match capture {
+        PromptCapture::EscapeNavigateSubmitTab => &["escape", "navigate", "submit", "tab"],
+        PromptCapture::TabOnly => &["tab"],
+        PromptCapture::None => &[],
+    }
 }
