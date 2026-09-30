@@ -1,0 +1,15 @@
+[package]
+name = "opencode"
+version = "1.18.30"
+edition = "2021"
+description = "Rust port of packages/opencode v1.18.30 (pin 3104c14)"
+license = "MIT"
+
+[lib]
+name = "opencode"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+core = { path = "../core" }

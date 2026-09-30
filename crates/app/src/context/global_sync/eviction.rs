@@ -1,0 +1,27 @@
+//! Rust port of `packages/app/src/context/global-sync/eviction.ts` (opencode v1.18.30).
+//!
+//! Source 29 lines. Exports: `pickDirectoriesToEvict`, `canDisposeDirectory`.
+//!
+//! 1:1 notes:
+//! - SolidJS reactivity/router → PROVISIONAL stubs flagged below.
+//! - Persist keys, route keys, defaults, ordering preserved where applicable.
+//! - Original file: `packages/app/src/context/global-sync/eviction.ts`
+
+#![allow(dead_code)]
+#![allow(unused_imports)]
+
+use serde::{Deserialize, Serialize};
+
+/// Mirrors `pickDirectoriesToEvict`.
+// PROVISIONAL: pending solid-js — mirrors packages/app/src/context/global-sync/eviction.ts
+#[allow(non_snake_case)]
+pub fn pickDirectoriesToEvict(/* input: EvictPlan */) -> serde_json::Value {
+    serde_json::json!({})
+}
+
+/// Mirrors `canDisposeDirectory`.
+// PROVISIONAL: pending solid-js — mirrors packages/app/src/context/global-sync/eviction.ts
+#[allow(non_snake_case)]
+pub fn canDisposeDirectory(/* input: DisposeCheck */) -> serde_json::Value {
+    serde_json::json!({})
+}

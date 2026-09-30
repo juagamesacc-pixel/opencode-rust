@@ -1,0 +1,22 @@
+// source: src/server/routes/instance/httpapi/groups/*.ts (barrel).
+pub mod config;
+pub mod control;
+pub mod control_plane;
+pub mod event;
+pub mod experimental;
+pub mod file;
+pub mod global;
+pub mod instance;
+pub mod mcp;
+pub mod metadata;
+pub mod permission;
+pub mod project;
+pub mod project_copy;
+pub mod provider;
+pub mod pty;
+pub mod query;
+pub mod question;
+pub mod session;
+pub mod sync;
+pub mod tui;
+pub mod workspace;

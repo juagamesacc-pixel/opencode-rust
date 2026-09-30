@@ -1,0 +1,10 @@
+[package]
+name = "identity"
+version = "1.18.30"
+edition = "2021"
+description = "Rust port of @opencode-ai/identity brand assets @ v1.18.30 commit 3104c14"
+license = "MIT"
+
+[lib]
+name = "identity"
+path = "src/lib.rs"

@@ -1,0 +1,10 @@
+[package]
+name = "docs"
+version = "1.18.30"
+edition = "2021"
+description = "Rust port of @opencode-ai/docs site content @ v1.18.30 commit 3104c14"
+license = "MIT"
+
+[lib]
+name = "docs"
+path = "src/lib.rs"

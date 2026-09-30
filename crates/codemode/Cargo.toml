@@ -1,0 +1,20 @@
+[package]
+name = "codemode"
+version = "1.18.30"
+edition = "2021"
+description = "Effect-native confined code execution over schema-described tools (Rust port of @opencode-ai/codemode @ v1.18.30 commit 3104c1428ec91f809e5ab86631300de41eb6952e)"
+license = "MIT"
+
+[lib]
+name = "codemode"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# NOTE: no tokio, no parser crate. The Effect runtime is modelled as an
+# explicit sync Rust state machine with identical observable semantics
+# (plan-for-codemode.md §3.5). The Acorn/TS parse boundary is represented
+# with serde_json::Value-based AST nodes + typed helpers (see
+# interpreter_model.rs); parser-equivalence is a flagged risk (R1), NOT
+# silently resolved with a new dependency.

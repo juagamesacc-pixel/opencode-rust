@@ -1,0 +1,16 @@
+[package]
+name = "cli"
+version = "1.18.30"
+edition = "2021"
+description = "OpenCode 2.0 preview command line interface (Rust port of packages/cli @ v1.18.30 commit 3104c14)"
+license = "MIT"
+
+[[bin]]
+name = "lildax"
+path = "src/main.rs"
+
+[dependencies]
+clap = "4"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

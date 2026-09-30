@@ -1,0 +1,14 @@
+[package]
+name = "desktop"
+version = "1.18.30"
+edition = "2021"
+license = "MIT"
+description = "Rust port of the opencode v1.18.30 Electron desktop app (packages/desktop/src): main process, preload, IPC, menu, app state"
+
+[lib]
+name = "desktop"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }

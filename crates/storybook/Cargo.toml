@@ -1,0 +1,10 @@
+[package]
+name = "storybook"
+version = "1.18.30"
+edition = "2021"
+description = "Rust port of @opencode-ai/storybook config @ v1.18.30 commit 3104c14"
+license = "MIT"
+
+[lib]
+name = "storybook"
+path = "src/lib.rs"

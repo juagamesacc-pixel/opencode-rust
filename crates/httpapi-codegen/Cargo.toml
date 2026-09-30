@@ -1,0 +1,14 @@
+[package]
+name = "httpapi-codegen"
+version = "1.18.30"
+edition = "2021"
+description = "Rust port of @opencode-ai/httpapi-codegen @ v1.18.30 commit 3104c14"
+license = "MIT"
+
+[lib]
+name = "httpapi_codegen"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

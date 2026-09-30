@@ -1,0 +1,30 @@
+//! Rust port of `src/renderer/i18n/da.ts` (opencode v1.18.30).
+//!
+//! Verbatim locale string table. Values and placeholders are preserved byte-for-byte.
+//! Original file: `packages/desktop/src/renderer/i18n/da.ts`
+
+/// Mirrors `export const dict` as a verbatim flattened string table.
+pub const ENTRIES: &[(&str, &str)] = &[
+    ("desktop.menu.checkForUpdates", "Tjek for opdateringer..."),
+    ("desktop.menu.installCli", "Installer CLI..."),
+    ("desktop.menu.reloadWebview", "Genindlæs webvisning"),
+    ("desktop.menu.restart", "Genstart"),
+    ("desktop.dialog.chooseFolder", "Vælg en mappe"),
+    ("desktop.dialog.chooseFile", "Vælg en fil"),
+    ("desktop.dialog.saveFile", "Gem fil"),
+    ("desktop.updater.checkFailed.title", "Opdateringstjek mislykkedes"),
+    ("desktop.updater.checkFailed.message", "Kunne ikke tjekke for opdateringer"),
+    ("desktop.updater.none.title", "Ingen opdatering tilgængelig"),
+    ("desktop.updater.none.message", "Du bruger allerede den nyeste version af OpenCode"),
+    ("desktop.updater.downloadFailed.title", "Opdatering mislykkedes"),
+    ("desktop.updater.downloadFailed.message", "Kunne ikke downloade opdateringen"),
+    ("desktop.updater.downloaded.title", "Opdatering downloadet"),
+    ("desktop.updater.downloaded.prompt", "Version {{version}} af OpenCode er blevet downloadet. Vil du installere den og genstarte?"),
+    ("desktop.updater.installFailed.title", "Opdatering mislykkedes"),
+    ("desktop.updater.installFailed.message", "Kunne ikke installere opdateringen"),
+    ("desktop.cli.installed.title", "CLI installeret"),
+    ("desktop.cli.installed.message", "CLI installeret i {{path}}\n\nGenstart din terminal for at bruge 'opencode'-kommandoen."),
+    ("desktop.cli.failed.title", "Installation mislykkedes"),
+    ("desktop.cli.failed.message", "Kunne ikke installere CLI: {{error}}"),
+    ("desktop.error.dev.rootNotFound", "Rodelement ikke fundet. Har du glemt at tilføje det til din index.html? Eller måske er id-attributten stavet forkert?"),
+];

@@ -1,0 +1,43 @@
+//! Components barrel — mirrors packages/app/src/components directory.
+#![allow(clippy::all)]
+pub mod attachments;
+pub mod attachments_test;
+pub mod build_request_parts;
+pub mod build_request_parts_test;
+pub mod context_items;
+pub mod contracts;
+pub mod drag_overlay;
+pub mod editor_dom;
+pub mod editor_dom_test;
+pub mod files;
+pub mod history;
+pub mod history_store;
+pub mod history_test;
+pub mod image_attachments;
+pub mod image_attachments_css;
+pub mod paste;
+pub mod placeholder;
+pub mod placeholder_test;
+pub mod slash_popover;
+pub mod submission_state;
+pub mod submit;
+pub mod submit_test;
+pub mod transient_state;
+
+pub use attachments::*;
+pub use build_request_parts::*;
+pub use context_items::*;
+pub use contracts::*;
+pub use drag_overlay::*;
+pub use editor_dom::*;
+pub use files::*;
+pub use history::*;
+pub use history_store::*;
+pub use image_attachments::*;
+pub use image_attachments_css::*;
+pub use paste::*;
+pub use placeholder::*;
+pub use slash_popover::*;
+pub use submission_state::*;
+pub use submit::*;
+pub use transient_state::*;
