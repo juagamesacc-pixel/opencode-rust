@@ -3,6 +3,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
+pub mod screen;
 pub mod session_destination;
 
 // Home route (from routes/home.tsx)

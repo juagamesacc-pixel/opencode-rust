@@ -1,16 +1,21 @@
-// source: packages/tui/src/routes/session/dialog-subagent.tsx (27 lines, v1.18.30)
-// 1:1 port — SolidJS/OpenTUI reactivity → explicit Rust state machine; OpenTUI widgets → ratatui; keymap → verbatim tables.
-// DO NOT EDIT — generated, preserve verbatim strings/behavior.
+// source: packages/tui/src/routes/session/dialog-subagent.tsx (26 lines, v1.18.30)
+// 1:1 port — single `Open` action navigating to the subagent session.
 
 #![allow(dead_code)]
-#![allow(unused_imports)]
 
-// Stub — preserves export names/order; full logic wired via ratatui + tokio where applicable.
-// Original TS exports (first 5): import { DialogSelect } from "../../ui/dialog-select" import { useRoute } from "../../context/route"  export function DialogSubagent(props: { sessionID: string }) {   const route = useRoute()    retur
-struct Stub;
-impl Stub {
-    pub fn new() -> Self {
-        Self
-    }
-    pub fn update(&mut self) {}
+use serde_json::Value;
+
+use crate::ui::dialog_select::{SelectOption, SelectState};
+
+/// Build the subagent-actions state (title `Subagent Actions`).
+pub fn subagent_actions_state(session_id: &str) -> SelectState {
+    SelectState::new(
+        "Subagent Actions",
+        vec![SelectOption {
+            title: "Open".to_string(),
+            value: Value::String(session_id.to_string()),
+            description: Some("the subagent's session".to_string()),
+            ..SelectOption::default()
+        }],
+    )
 }
