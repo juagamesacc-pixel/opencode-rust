@@ -14,17 +14,33 @@ pub fn format_duration(secs: f64) -> String {
     if secs < 3600.0 {
         let mins = (secs / 60.0).floor();
         let remaining = secs % 60.0;
-        return if remaining > 0.0 { format!("{mins}m {remaining}s") } else { format!("{mins}m") };
+        return if remaining > 0.0 {
+            format!("{mins}m {remaining}s")
+        } else {
+            format!("{mins}m")
+        };
     }
     if secs < 86400.0 {
         let hours = (secs / 3600.0).floor();
         let remaining = ((secs % 3600.0) / 60.0).floor();
-        return if remaining > 0.0 { format!("{hours}h {remaining}m") } else { format!("{hours}h") };
+        return if remaining > 0.0 {
+            format!("{hours}h {remaining}m")
+        } else {
+            format!("{hours}h")
+        };
     }
     if secs < 604800.0 {
         let days = (secs / 86400.0).floor();
-        return if days == 1.0 { "~1 day".to_string() } else { format!("~{days} days") };
+        return if days == 1.0 {
+            "~1 day".to_string()
+        } else {
+            format!("~{days} days")
+        };
     }
     let weeks = (secs / 604800.0).floor();
-    if weeks == 1.0 { "~1 week".to_string() } else { format!("~{weeks} weeks") }
+    if weeks == 1.0 {
+        "~1 week".to_string()
+    } else {
+        format!("~{weeks} weeks")
+    }
 }

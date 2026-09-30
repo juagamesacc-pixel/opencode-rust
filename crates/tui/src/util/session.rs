@@ -21,7 +21,8 @@ fn is_iso_millis(value: &str) -> bool {
     if bytes.len() != 24 {
         return false;
     }
-    let digits = |range: std::ops::Range<usize>| range.into_iter().all(|i| bytes[i].is_ascii_digit());
+    let digits =
+        |range: std::ops::Range<usize>| range.into_iter().all(|i| bytes[i].is_ascii_digit());
     digits(0..4)
         && bytes[4] == b'-'
         && digits(5..7)

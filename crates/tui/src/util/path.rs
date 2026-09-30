@@ -11,7 +11,9 @@ pub fn normalize_path(input: &str, platform: &str) -> String {
     }
     let slashed = input.replace('/', "\\");
     let resolved = win32_normalize(&win32_resolve(&slashed));
-    std::fs::canonicalize(&resolved).map(|p| p.to_string_lossy().into_owned()).unwrap_or(resolved)
+    std::fs::canonicalize(&resolved)
+        .map(|p| p.to_string_lossy().into_owned())
+        .unwrap_or(resolved)
 }
 
 /// Minimal `win32.resolve` (drive-relative + cwd join).
@@ -56,7 +58,11 @@ pub fn win32_normalize(input: &str) -> String {
     }
     let joined = parts.join("\\");
     let normalized = if drive.is_empty() {
-        if joined.is_empty() { ".".to_string() } else { joined }
+        if joined.is_empty() {
+            ".".to_string()
+        } else {
+            joined
+        }
     } else {
         format!("{}\\{}", drive, joined)
     };

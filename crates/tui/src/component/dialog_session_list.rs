@@ -202,8 +202,11 @@ impl SessionListState {
             .collect();
         let pinned_set: HashSet<&str> = pinned.iter().map(|s| s.as_str()).collect();
         let slot_list = local.slots(sync);
-        let slots: HashMap<&str, usize> =
-            slot_list.iter().enumerate().map(|(index, id)| (id.as_str(), index + 1)).collect();
+        let slots: HashMap<&str, usize> = slot_list
+            .iter()
+            .enumerate()
+            .map(|(index, id)| (id.as_str(), index + 1))
+            .collect();
         let build = |id: &str, category: String| -> Option<SelectOption> {
             let session = map.get(id)?;
             let path = session.get("path").and_then(|v| v.as_str()).unwrap_or("");
@@ -218,7 +221,10 @@ impl SessionListState {
                     truncate_file_name(directory)
                 }
             } else if directory.ends_with(path) {
-                let base = directory.strip_suffix(path).unwrap_or("").trim_end_matches('/');
+                let base = directory
+                    .strip_suffix(path)
+                    .unwrap_or("")
+                    .trim_end_matches('/');
                 if base.is_empty() || Some(base) == main_dir {
                     String::new()
                 } else {

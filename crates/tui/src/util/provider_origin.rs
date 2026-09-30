@@ -11,6 +11,9 @@ pub fn is_console_managed_provider(console_managed: &[String], provider_id: &str
 }
 
 /// Set-backed variant (the TS `ReadonlySet` branch).
-pub fn is_console_managed_provider_set(console_managed: &HashSet<String>, provider_id: &str) -> bool {
+pub fn is_console_managed_provider_set(
+    console_managed: &HashSet<String>,
+    provider_id: &str,
+) -> bool {
     console_managed.contains(provider_id)
 }

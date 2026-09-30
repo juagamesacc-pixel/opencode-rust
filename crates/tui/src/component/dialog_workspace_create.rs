@@ -17,8 +17,8 @@ use crate::ui::dialog::DialogStack;
 use crate::ui::dialog_alert::show_alert;
 use crate::ui::dialog_select::{SelectOption, SelectState};
 use crate::ui::toast::{ToastInput, ToastState};
-use crate::util::selection::ToastVariant;
 use crate::util::error::error_message_value;
+use crate::util::selection::ToastVariant;
 
 /// Mirrors `WorkspaceSelection`.
 #[derive(Debug, Clone)]

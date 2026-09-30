@@ -17,11 +17,16 @@ pub fn web_search_provider_label(provider: &Value) -> &'static str {
 /// Mirrors `toolDisplayMetadata` — non-object, pending, missing/non-object
 /// `structured`, and array `structured` all yield an empty map.
 pub fn tool_display_metadata(state: &Value) -> Map<String, Value> {
-    let Some(map) = state.as_object() else { return Map::new() };
-    if !map.contains_key("status") || map.get("status").and_then(|s| s.as_str()) == Some("pending") {
+    let Some(map) = state.as_object() else {
+        return Map::new();
+    };
+    if !map.contains_key("status") || map.get("status").and_then(|s| s.as_str()) == Some("pending")
+    {
         return Map::new();
     }
-    let Some(structured) = map.get("structured") else { return Map::new() };
+    let Some(structured) = map.get("structured") else {
+        return Map::new();
+    };
     match structured {
         Value::Object(inner) => inner.clone(),
         _ => Map::new(),

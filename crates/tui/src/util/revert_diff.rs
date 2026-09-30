@@ -30,8 +30,16 @@ pub fn get_revert_diff_files(diff_text: &str) -> Vec<RevertDiffFile> {
         }
         if line.starts_with("+++ ") || line.starts_with("--- ") {
             if let Some(file) = current.as_mut() {
-                let candidate = line[4..].split('\t').next().unwrap_or("").trim().to_string();
-                if candidate != "/dev/null" && !file.filename.is_empty() && file.filename == "unknown" {
+                let candidate = line[4..]
+                    .split('\t')
+                    .next()
+                    .unwrap_or("")
+                    .trim()
+                    .to_string();
+                if candidate != "/dev/null"
+                    && !file.filename.is_empty()
+                    && file.filename == "unknown"
+                {
                     file.filename = strip_prefix(&candidate);
                 }
             }
@@ -57,10 +65,23 @@ pub fn get_revert_diff_files(diff_text: &str) -> Vec<RevertDiffFile> {
 fn new_file(git_header: &str) -> RevertDiffFile {
     // `a/path b/path` — prefer the b-side, fall back to the a-side.
     let parts: Vec<&str> = git_header.split_whitespace().collect();
-    let candidate = parts.iter().rev().find(|part| **part != "/dev/null").copied().unwrap_or("unknown");
-    RevertDiffFile { filename: strip_prefix(candidate), additions: 0, deletions: 0 }
+    let candidate = parts
+        .iter()
+        .rev()
+        .find(|part| **part != "/dev/null")
+        .copied()
+        .unwrap_or("unknown");
+    RevertDiffFile {
+        filename: strip_prefix(candidate),
+        additions: 0,
+        deletions: 0,
+    }
 }
 
 fn strip_prefix(value: &str) -> String {
-    value.strip_prefix("a/").or_else(|| value.strip_prefix("b/")).unwrap_or(value).to_string()
+    value
+        .strip_prefix("a/")
+        .or_else(|| value.strip_prefix("b/"))
+        .unwrap_or(value)
+        .to_string()
 }

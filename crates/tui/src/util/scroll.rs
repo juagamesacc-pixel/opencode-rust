@@ -38,10 +38,12 @@ pub struct ScrollConfig {
 /// Mirrors `getScrollAcceleration`.
 pub fn get_scroll_acceleration(config: Option<&ScrollConfig>) -> ScrollAcceleration {
     match config {
-        Some(config) if config.scroll_acceleration_enabled == Some(true) => ScrollAcceleration::MacOs(MacOsScrollAccel),
-        Some(config) if config.scroll_speed.is_some() => {
-            ScrollAcceleration::Custom(CustomSpeedScroll::new(config.scroll_speed.unwrap_or_default()))
+        Some(config) if config.scroll_acceleration_enabled == Some(true) => {
+            ScrollAcceleration::MacOs(MacOsScrollAccel)
         }
+        Some(config) if config.scroll_speed.is_some() => ScrollAcceleration::Custom(
+            CustomSpeedScroll::new(config.scroll_speed.unwrap_or_default()),
+        ),
         _ => ScrollAcceleration::Custom(CustomSpeedScroll::new(3.0)),
     }
 }

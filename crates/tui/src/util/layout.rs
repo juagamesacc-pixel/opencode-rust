@@ -18,13 +18,20 @@ impl SiblingMargins {
         self.frame_id = frame_id;
         self.cache.clear();
         for index in 0..child_count {
-            self.cache.insert(index, if index == 0 { None } else { Some(index - 1) });
+            self.cache
+                .insert(index, if index == 0 { None } else { Some(index - 1) });
         }
     }
 
     /// Mirrors the lifecycle pass: returns the margin for `index` given
     /// `margin(previous)`. Caches per frame id (rebuild on change).
-    pub fn margin_for(&mut self, frame_id: u64, child_count: usize, index: usize, margin: impl Fn(Option<usize>) -> u16) -> u16 {
+    pub fn margin_for(
+        &mut self,
+        frame_id: u64,
+        child_count: usize,
+        index: usize,
+        margin: impl Fn(Option<usize>) -> u16,
+    ) -> u16 {
         if self.frame_id != frame_id || self.cache.len() != child_count {
             self.rebuild(frame_id, child_count);
         }
