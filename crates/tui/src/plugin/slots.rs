@@ -172,11 +172,7 @@ impl HostSlots {
         if !is_host_slot_plugin(&shape) {
             return Box::new(|| {});
         }
-        let mut guard = self
-            .manager
-            .inner
-            .lock()
-            .unwrap_or_else(|e| e.into_inner());
+        let mut guard = self.manager.inner.lock().unwrap_or_else(|e| e.into_inner());
         let id = guard.registry.register(plugin);
         let manager = self.manager.clone();
         Box::new(move || {

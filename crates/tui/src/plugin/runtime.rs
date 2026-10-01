@@ -34,12 +34,16 @@ pub struct TuiPluginStatus {
     pub status: String,
 }
 
+/// Install handler shape (mirrors the `install` command signature).
+pub type InstallFn =
+    Box<dyn FnMut(&str, Option<TuiPluginInstallOptions>) -> TuiPluginInstallResult + Send>;
+
 /// Mirrors `PluginRuntimeCommands` — activate/deactivate/add/install.
 pub struct PluginRuntimeCommands {
     activate_fn: Box<dyn FnMut(&str) -> bool + Send>,
     deactivate_fn: Box<dyn FnMut(&str) -> bool + Send>,
     add_fn: Box<dyn FnMut(&str) -> bool + Send>,
-    install_fn: Box<dyn FnMut(&str, Option<TuiPluginInstallOptions>) -> TuiPluginInstallResult + Send>,
+    install_fn: InstallFn,
 }
 
 impl PluginRuntimeCommands {

@@ -124,7 +124,11 @@ impl ShimDialog {
     }
 
     /// Mirrors `replace(render, onClose)`.
-    pub fn replace(&self, _render: Box<dyn FnMut(&mut DialogStack) + Send>, on_close: Option<Box<dyn FnMut() + Send>>) {
+    pub fn replace(
+        &self,
+        _render: Box<dyn FnMut(&mut DialogStack) + Send>,
+        on_close: Option<Box<dyn FnMut() + Send>>,
+    ) {
         let mut guard = self.inner.lock().unwrap_or_else(|e| e.into_inner());
         guard.ops.push(DialogOp::Replace {
             has_on_close: on_close.is_some(),
@@ -164,13 +168,7 @@ impl ShimDialog {
 
     /// Drain recorded ops (app applies them to the live stack).
     pub fn drain_ops(&self) -> Vec<DialogOp> {
-        std::mem::take(
-            &mut self
-                .inner
-                .lock()
-                .unwrap_or_else(|e| e.into_inner())
-                .ops,
-        )
+        std::mem::take(&mut self.inner.lock().unwrap_or_else(|e| e.into_inner()).ops)
     }
 
     /// Re-sync size/depth from the live stack.
@@ -196,6 +194,9 @@ pub struct TuiCommand {
     pub on_select: Option<Box<dyn FnMut(ShimDialog) + Send>>,
 }
 
+/// Shared `onSelect` handle (mirrors the captured dialog closure).
+pub type SharedOnSelect = Arc<Mutex<Option<Box<dyn FnMut(ShimDialog) + Send>>>>;
+
 /// Mirrors the object built by `toCommand` — field order verbatim:
 /// namespace/name/title/desc/category/suggested/hidden/enabled/
 /// slashName/slashAliases/run. `namespace` is always `"palette"`.
@@ -210,18 +211,13 @@ pub struct ShimRegisteredCommand {
     pub enabled: Option<bool>,
     pub slash_name: Option<String>,
     pub slash_aliases: Vec<String>,
-    pub run: Arc<Mutex<Option<Box<dyn FnMut(ShimDialog) + Send>>>>,
+    pub run: SharedOnSelect,
 }
 
 impl ShimRegisteredCommand {
     /// Mirrors `run() { return item.onSelect?.(dialog) }`.
     pub fn run(&self, dialog: ShimDialog) {
-        if let Some(on_select) = self
-            .run
-            .lock()
-            .unwrap_or_else(|e| e.into_inner())
-            .as_mut()
-        {
+        if let Some(on_select) = self.run.lock().unwrap_or_else(|e| e.into_inner()).as_mut() {
             on_select(dialog);
         }
     }
@@ -300,8 +296,7 @@ fn resolve_command(keybind: &str) -> &str {
 /// is supplied at `run(dialog)` call time (mirrors `item.onSelect?.(dialog)`).
 pub fn to_command(item: TuiCommand, _dialog: ShimDialog) -> ShimRegisteredCommand {
     let on_select = item.on_select;
-    let run: Arc<Mutex<Option<Box<dyn FnMut(ShimDialog) + Send>>>> =
-        Arc::new(Mutex::new(on_select));
+    let run: SharedOnSelect = Arc::new(Mutex::new(on_select));
     ShimRegisteredCommand {
         namespace: "palette",
         name: item.value,
@@ -333,20 +328,20 @@ pub fn to_bindings(commands: &[TuiCommandRef<'_>], keybinds: &BindingLookup) -> 
             for binding in keybinds.get(resolved) {
                 out.push(ShimBinding {
                     key: binding_key_display(&binding.key),
-                    cmd: item.value.clone(),
+                    cmd: item.value.to_string(),
                     desc: Some(
                         binding
                             .desc
                             .clone()
-                            .unwrap_or_else(|| item.title.clone()),
+                            .unwrap_or_else(|| item.title.to_string()),
                     ),
                 });
             }
         } else {
             out.push(ShimBinding {
                 key: keybind.clone(),
-                cmd: item.value.clone(),
-                desc: Some(item.title.clone()),
+                cmd: item.value.to_string(),
+                desc: Some(item.title.to_string()),
             });
         }
     }

@@ -32,7 +32,8 @@ use crate::ui::dialog_alert::show_alert;
 use crate::ui::dialog_confirm::{show_confirm, ConfirmResult};
 use crate::ui::dialog_prompt::{show_prompt, PromptProps, PromptResult};
 use crate::ui::dialog_select::SelectOption;
-use crate::ui::toast::{ToastInput, ToastState, ToastVariant};
+use crate::ui::toast::{ToastInput, ToastState};
+use crate::util::selection::ToastVariant;
 
 use super::api::{PluginRoutes, RouteDefinition, Unregister};
 use super::command_shim::{create_command_shim, CommandShim, KeymapShim, ShimDialog};
@@ -88,7 +89,8 @@ pub fn route_navigate(route: &mut RouteStore, name: &str, params: Option<&HashMa
     }
     route.navigate(Route::Plugin(PluginRoute {
         id: name.to_string(),
-        data: params.map(|p| Value::Object(p.iter().map(|(k, v)| (k.clone(), v.clone())).collect())),
+        data: params
+            .map(|p| Value::Object(p.iter().map(|(k, v)| (k.clone(), v.clone())).collect())),
     }));
 }
 
@@ -167,11 +169,13 @@ pub fn pick_option(item: &SelectOption) -> TuiDialogSelectOption {
 }
 
 /// Mirrors `mapOptionCb` — wraps an optional callback with pickOption.
+pub type SelectChangeCallback = Box<dyn FnMut(&SelectOption) + Send>;
+
 pub fn map_option_cb(
     cb: Option<Box<dyn FnMut(TuiDialogSelectOption) + Send>>,
-) -> Option<Box<dyn FnMut(&SelectOption) + Send>> {
+) -> Option<SelectChangeCallback> {
     cb.map(|mut inner| {
-        let boxed: Box<dyn FnMut(&SelectOption) + Send> =
+        let boxed: SelectChangeCallback =
             Box::new(move |item: &SelectOption| inner(pick_option(item)));
         boxed
     })
@@ -229,7 +233,7 @@ pub fn state_snapshot(sync: &SyncStore, path: &str) -> StateSnapshot {
         .collect();
     // Mirrors `mcp()` — sorted by name, error only when failed.
     let mut mcp_entries: Vec<(&String, &Value)> = sync.mcp.iter().collect();
-    mcp_entries.sort_by(|(a, _), (b, _)| a.cmp(b));
+    mcp_entries.sort_by_key(|(a, _)| *a);
     let mcp: Vec<Value> = mcp_entries
         .into_iter()
         .map(|(name, item)| {
@@ -269,9 +273,9 @@ impl StateSnapshot {
 
     /// Mirrors `session.get(sessionID)`.
     pub fn session_get(&self, session_id: &str) -> Option<&Value> {
-        self.session.iter().find(|s| {
-            s.get("id").and_then(|v| v.as_str()) == Some(session_id)
-        })
+        self.session
+            .iter()
+            .find(|s| s.get("id").and_then(|v| v.as_str()) == Some(session_id))
     }
 
     /// Mirrors `session.diff(sessionID)` — drops items with undefined file.
@@ -558,7 +562,13 @@ impl<'a> TuiApiAdapters<'a> {
     }
 
     /// Mirrors `ui.toast(...)` — `variant ?? "info"`, duration passthrough.
-    pub fn toast(&mut self, title: Option<String>, message: String, variant: Option<ToastVariant>, duration: Option<u64>) {
+    pub fn toast(
+        &mut self,
+        title: Option<String>,
+        message: String,
+        variant: Option<ToastVariant>,
+        duration: Option<u64>,
+    ) {
         self.toast.show(ToastInput {
             title,
             message,
